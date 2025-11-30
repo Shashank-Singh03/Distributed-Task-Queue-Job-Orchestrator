@@ -51,7 +51,7 @@ export default function MetricsCards({ jobCounts }: MetricsCardsProps) {
       label: 'Cancelled',
       count: jobCounts.CANCELLED,
       status: 'CANCELLED' as JobStatus,
-      variant: 'default' as const,
+      variant: 'info' as const,
     })
   }
 

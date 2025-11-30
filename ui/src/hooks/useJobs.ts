@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { listJobs } from '../api/jobs'
-import type { JobResponse, JobStatus, ListJobsParams } from '../api/types'
+import type { JobResponse, ListJobsParams } from '../api/types'
 
 interface UseJobsResult {
   jobs: JobResponse[]

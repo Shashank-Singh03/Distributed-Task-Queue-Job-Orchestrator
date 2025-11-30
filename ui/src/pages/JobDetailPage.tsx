@@ -12,7 +12,7 @@ import { useState } from 'react'
 
 export default function JobDetailPage() {
   const { jobId } = useParams<{ jobId: string }>()
-  const { job, loading, error, refetch } = useJobDetail(jobId || '')
+  const { job, loading, error, refetch, cancel, cancelling } = useJobDetail(jobId || '')
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   const handleRetry = async () => {
@@ -71,7 +71,12 @@ export default function JobDetailPage() {
           </div>
         </div>
 
-        <JobDetailPanel job={job} />
+        <JobDetailPanel 
+          job={job} 
+          onCancel={cancel}
+          cancelling={cancelling}
+          cancelError={error}
+        />
 
         <div className="mt-8">
           <JobEventsTimeline jobId={job.job_id} />
