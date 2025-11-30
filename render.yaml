@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: taskqueue-backend
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    # Option 1: Use the startup script (recommended)
+    startCommand: "./render_backend_start.sh"
+    # Option 2: Direct command (alternative if script doesn't work)
+    # startCommand: "uvicorn app.api.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: REDIS_URL
+        value: "redis://<your-redis-host>:6379/0"
+      - key: FRONTEND_ORIGIN
+        value: "https://<your-frontend-domain>"
+

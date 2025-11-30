@@ -120,6 +120,84 @@ See `.env.example` for all configuration options. Key settings:
 
 ## Deployment
 
+### Render + Netlify/Vercel (Recommended for Quick Deployment)
+
+This deployment approach uses Render for the backend and Netlify/Vercel for the frontend, with no Docker required.
+
+#### Backend (Render)
+
+1. **Create a new Web Service on Render:**
+   - Connect your GitHub repository
+   - Select "Web Service" type
+   - Environment: Python
+
+2. **Configure Build & Start:**
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command (Option 1 - Recommended):** `./render_backend_start.sh`
+   - **Start Command (Option 2 - Alternative):** `uvicorn app.api.main:app --host 0.0.0.0 --port $PORT`
+   
+   **Note:** If you get "No such file or directory" error, use Option 2 (direct command) instead.
+
+3. **Set Environment Variables:**
+   - `REDIS_URL` - Your Redis connection string (Render Redis or external)
+   - `FRONTEND_ORIGIN` - Your frontend URL (e.g., `https://your-app.netlify.app`)
+   - `ENVIRONMENT` - Set to `production` to disable dev endpoints
+
+4. **Deploy:**
+   - Render will automatically build and deploy on every push to main
+   - Your backend will be available at `https://your-service.onrender.com`
+
+**Note:** Make sure `render_backend_start.sh` is executable. Render will handle this automatically, but if deploying manually, run:
+```bash
+chmod +x render_backend_start.sh
+```
+
+#### Frontend (Netlify or Vercel)
+
+**For Netlify:**
+
+1. **Create a new site:**
+   - Connect your GitHub repository
+   - Base directory: `ui`
+   - Build command: `npm run build`
+   - Publish directory: `ui/dist`
+
+2. **Set Environment Variables:**
+   - `VITE_API_BASE_URL` - Your Render backend URL (e.g., `https://your-service.onrender.com`)
+
+3. **Deploy:**
+   - Netlify will automatically build and deploy on every push to main
+
+**For Vercel:**
+
+1. **Import your repository:**
+   - Select the repository
+   - Root directory: `ui`
+   - Framework preset: Vite
+
+2. **Set Environment Variables:**
+   - `VITE_API_BASE_URL` - Your Render backend URL (e.g., `https://your-service.onrender.com`)
+
+3. **Deploy:**
+   - Vercel will automatically build and deploy on every push to main
+
+#### Local Development with Proxy
+
+For local development, the frontend uses a proxy to the backend:
+
+**Backend:**
+```bash
+uvicorn app.api.main:app --reload --port 8000
+```
+
+**Frontend:**
+```bash
+cd ui
+npm run dev
+```
+
+The frontend will proxy `/api/*` requests to `http://localhost:8000`, so API calls work seamlessly in development without CORS issues.
+
 ### Docker Compose (Local)
 
 1. Start all services:
