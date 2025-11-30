@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     max_retries: int = Field(default=3)
     initial_backoff_ms: int = Field(default=1000)
     max_backoff_ms: int = Field(default=300000)  # 5 minutes
+    
+    # Frontend origin for CORS (production deployment)
+    frontend_origin: str | None = Field(default=None)
 
 
 # Global settings instance
